@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('princing_types', function (Blueprint $table) {
+        Schema::create('meat_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->float('percentage');
+            $table->string('name_jp');
+            $table->string('name_en');
+            $table->string('note');
+            $table->timestamps();
         });
     }
 
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('princing_types');
+        Schema::dropIfExists('meat_types');
     }
 };
