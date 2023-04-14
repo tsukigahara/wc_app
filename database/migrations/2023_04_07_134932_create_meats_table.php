@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->float('unit');
             $table->float('average_size');
+            $table->float('pz_box');
+
+
 
             //same for all products
             $table->float('purchase_price');

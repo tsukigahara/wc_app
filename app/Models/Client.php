@@ -17,4 +17,34 @@ class Client extends Model
         'pec',
         'sede_legale',
     ];
+
+    public function delivery_data()
+    {
+        return $this->hasMany(DeliveryData::class);
+    }
+
+    public function client_type()
+    {
+        return $this->belongsTo(ClientType::class);
+    }
+
+    public function pricing_type()
+    {
+        return $this->belongsTo(PricingType::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
+    }
 }

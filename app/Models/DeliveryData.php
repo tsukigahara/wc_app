@@ -17,4 +17,24 @@ class DeliveryData extends Model
         'telephone',
         'email',
     ];
+
+    public function client()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
+    }
 }
