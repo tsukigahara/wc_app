@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->integer('partita_iva')->unique();
-            $table->string('codice_fiscale')->unique();
-            $table->string('sdi');
+            $table->string('partita_iva', '11')->unique();
+            $table->string('codice_fiscale', '16')->unique();
+            $table->string('sdi', '7');
             $table->string('pec');
             $table->string('sede_legale');
+            $table->string('city');
             $table->timestamps();
         });
     }

@@ -17,8 +17,6 @@ return new class extends Migration
                 ->constrained();
             $table->foreignId('pricing_type_id')
                 ->constrained();
-            $table->foreignId('city_id')
-                ->constrained();
             $table->foreignId('province_id')
                 ->constrained();
             $table->foreignId('region_id')
@@ -27,8 +25,6 @@ return new class extends Migration
 
         //DELIVERY_DATA
         Schema::table('delivery_data', function (Blueprint $table) {
-            $table->foreignId('city_id')
-                ->constrained();
             $table->foreignId('province_id')
                 ->constrained();
             $table->foreignId('region_id')
@@ -47,14 +43,12 @@ return new class extends Migration
         Schema::table('clients', function (Blueprint $table) {
             $table->dropForeign(['client_type_id']);
             $table->dropForeign(['pricing_type_id']);
-            $table->dropForeign(['city_id']);
             $table->dropForeign(['province_id']);
             $table->dropForeign(['region_id']);
         });
 
         //DELIVERY_DATA
         Schema::table('delivery_data', function (Blueprint $table) {
-            $table->dropForeign(['city_id']);
             $table->dropForeign(['province_id']);
             $table->dropForeign(['region_id']);
             $table->dropForeign(['client_id']);
