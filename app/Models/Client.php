@@ -16,6 +16,7 @@ class Client extends Model
         'sdi',
         'pec',
         'sede_legale',
+        'city',
     ];
 
     public function delivery_data()

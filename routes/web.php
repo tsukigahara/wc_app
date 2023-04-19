@@ -18,12 +18,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return redirect('/login');
 });
 
 Route::middleware('auth', 'verified')->group(function () {
@@ -31,6 +26,8 @@ Route::middleware('auth', 'verified')->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
     Route::get('/dashboard/clients', [ClientController::class, 'index'])->name('dashboard.clients.index');
+    Route::get('/dashboard/clients/add', [ClientController::class, 'create'])->name('dashboard.clients.create');
+    Route::post('/dashboard/clients', [ClientController::class, 'store'])->name('dashboard.clients.store');
 });
 
 Route::middleware('auth')->group(function () {
