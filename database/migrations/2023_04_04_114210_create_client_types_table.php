@@ -18,8 +18,10 @@ return new class extends Migration
         });
 
         $type = array(
-            'Resturant',
-            'Shop',
+            'Ristorante',
+            'Macelleria',
+            'Hotel',
+            'Catering',
             'Other'
         );
 

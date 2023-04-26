@@ -61,7 +61,7 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Content -->
             <main>
-                <div class="container bg-white rounded shadow p-3">
+                <div class="container bg-white rounded shadow p-3 mb-5 ">
                     <slot />
                 </div>
             </main>

@@ -8,6 +8,7 @@ use App\Models\PricingType;
 use App\Models\Province;
 use App\Models\Region;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 use Inertia\Inertia;
 
 class ClientController extends Controller
@@ -17,11 +18,44 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::all();
-        $clients->load(['client_type', 'pricing_type', 'province', 'region']);
-
+        $clients = Client::with(['client_type', 'pricing_type', 'province', 'region'])
+            ->latest('updated_at')
+            ->when(FacadesRequest::input('search'), function ($query, $search) {
+                $query->where('ragione_sociale', 'like', '%' . $search . '%');
+            })
+            ->when(FacadesRequest::input('filter'), function ($query, $filter) {
+                $column = '';
+                switch ($filter) {
+                    case 'ragione_sociale':
+                        $column = 'ragione_sociale';
+                        break;
+                    case 'partita_iva':
+                        $column = 'partita_iva';
+                        break;
+                    case 'codice_fiscale':
+                        $column = 'codice_fiscale';
+                        break;
+                    case 'sdi':
+                        $column = 'sdi';
+                        break;
+                    case 'pec':
+                        $column = 'pec';
+                        break;
+                    case 'sede_legale':
+                        $column = 'sede_legale';
+                        break;
+                    case 'city':
+                        $column = 'city';
+                        break;
+                        // Aggiungi altri casi per le colonne desiderate
+                }
+                if ($column !== '') {
+                    $query->where($column, 'like', '%' . FacadesRequest::input('search') . '%');
+                }
+            })->paginate(20)->appends(FacadesRequest::only('search'));
         return Inertia::render('Client/Index', [
-            'clients' => $clients
+            'clients' => $clients,
+            'filters' => FacadesRequest::only('search'),
         ]);
     }
 
@@ -47,10 +81,10 @@ class ClientController extends Controller
             'ragione_sociale' => 'required|string|min:0|max:128',
             'client_type_id' => 'required|integer|min:0',
             'pricing_type_id' => 'required|integer|min:0',
-            'partita_iva' => 'required|string|min:11|max:11',
-            'codice_fiscale' => 'required|string|min:16|max:16',
-            'sdi' => 'required|string|min:7|max:7',
-            'pec' => 'required|string|min:0|max:128',
+            'partita_iva' => 'required|numeric|digits:11|unique:clients',
+            'codice_fiscale' => 'required|alpha_num|uppercase|min:16|max:16|unique:clients',
+            'sdi' => 'required|alpha_num|uppercase|min:7|max:7|unique:clients',
+            'pec' => 'required|email|min:0|max:128',
             'sede_legale' => 'required|string',
             'city' => 'required|string',
             'province_id' => 'required|integer|min:0',
