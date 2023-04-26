@@ -12,17 +12,6 @@ const props = defineProps({
 const search = ref(props.filters.search);
 const filter = ref(props.filters.filter);
 
-let showMore = false;
-function showTrigger() {
-    console.log(showMore);
-    if (showMore == false) {
-        return showMore = true;
-    }
-    if (showMore == true) {
-        return showMore = false;
-    }
-}
-
 watch([search, filter], ([value, value2]) => {
     router.get('/dashboard/clients', { search: value, filter: value2 }, {
         preserveState: true,
@@ -66,24 +55,25 @@ watch([search, filter], ([value, value2]) => {
         <div v-if="clients.data.length === 0">
             <h3 class="text-center">Nothing here...</h3>
         </div>
-        <div v-else class="row row-cols-1 row-cols-md-3 row-cols-xl-4 g-5">
+        <div v-else class="row row-cols-1 row-cols-md-3 row-cols-xl-4 g-4">
             <div class="col" v-for="client in clients.data">
                 <div class="card shadow-sm">
                     <div class="card-header">
-                        <h5>
-                            {{ client.client_type.name }}
+                        <small class="text-muted">Ragione sociale</small>
+                        <h3 class="card-title">
+                            {{ client.ragione_sociale }}
+                        </h3>
 
-                        </h5>
-                        <span class="badge rounded-pill text-bg-primary">prezzo: {{ client.pricing_type.name
-                        }}</span>
                     </div>
 
                     <ul class="list-group list-group-flush text-bg-light">
                         <li class="list-group-item">
-                            <small class="text-muted">Ragione sociale</small>
-                            <h5 class="card-title">
-                                {{ client.ragione_sociale }}
-                            </h5>
+                            <small class="text-muted">Tipologia</small>
+                            <div>
+                                {{ client.client_type.name }}
+                            </div>
+                            <span class="badge rounded-pill text-bg-primary">prezzo: {{ client.pricing_type.name
+                            }}</span>
                         </li>
                         <li class="list-group-item">
                             <small class="text-muted">Partita iva</small>
@@ -135,14 +125,20 @@ watch([search, filter], ([value, value2]) => {
                                 </div>
                             </li>
                         </div>
-                        <li class="list-group-item">
+                    </ul>
+                    <div class="card-footer">
+                        <div class="d-grid gap-2 ">
                             <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
                                 :data-bs-target="'#collapse-' + client.id" aria-expanded="false"
                                 :aria-controls="'collapse-' + client.id">
-                                more
+                                More
                             </button>
-                        </li>
-                    </ul>
+                            <Link class="btn btn-outline-primary" :href="route('dashboard.clients.edit', client)"
+                                role="button">
+                            Edit
+                            </Link>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

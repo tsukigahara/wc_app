@@ -28,6 +28,8 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/dashboard/clients', [ClientController::class, 'index'])->name('dashboard.clients.index');
     Route::get('/dashboard/clients/add', [ClientController::class, 'create'])->name('dashboard.clients.create');
     Route::post('/dashboard/clients', [ClientController::class, 'store'])->name('dashboard.clients.store');
+    Route::get('/dashboard/clients/{client}/edit', [ClientController::class, 'edit'])->name('dashboard.clients.edit');
+    Route::post('/dashboard/clients/{client}/edit', [ClientController::class, 'update'])->name('dashboard.clients.update');
 });
 
 Route::middleware('auth')->group(function () {

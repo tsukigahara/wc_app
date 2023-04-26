@@ -30,10 +30,10 @@ const showingNavigationDropdown = ref(false);
                                 route().current('dashboard.clients.index')">Clients</NavLink>
                         </li>
                     </ul>
-                    <div class="dropdown ">
-                        <Link class="btn btn-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                    <div class="dropdown">
+                        <Link class="btn btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                        {{ $page.props.auth.user.name }}
+                        Settings
                         </Link>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>

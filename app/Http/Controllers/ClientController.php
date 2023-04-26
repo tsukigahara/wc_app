@@ -21,7 +21,9 @@ class ClientController extends Controller
         $clients = Client::with(['client_type', 'pricing_type', 'province', 'region'])
             ->latest('updated_at')
             ->when(FacadesRequest::input('search'), function ($query, $search) {
-                $query->where('ragione_sociale', 'like', '%' . $search . '%');
+                if (!FacadesRequest::input('filter')) {
+                    $query->where('ragione_sociale', 'like', '%' . $search . '%');
+                }
             })
             ->when(FacadesRequest::input('filter'), function ($query, $filter) {
                 $column = '';
@@ -55,7 +57,7 @@ class ClientController extends Controller
             })->paginate(20)->appends(FacadesRequest::only('search'));
         return Inertia::render('Client/Index', [
             'clients' => $clients,
-            'filters' => FacadesRequest::only('search'),
+            'filters' => FacadesRequest::only(['search', 'filter']),
         ]);
     }
 
@@ -124,7 +126,13 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
-        //
+        return Inertia::render('Client/Edit', [
+            'client' => $client,
+            'client_types' => ClientType::all(),
+            'pricing_types' => PricingType::all(),
+            'provinces' => Province::all(),
+            'regions' => Region::all(),
+        ]);
     }
 
     /**
@@ -132,7 +140,37 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        //
+        $data = $request->validate([
+            'ragione_sociale' => 'required|string|min:0|max:128',
+            'client_type_id' => 'required|integer|min:0',
+            'pricing_type_id' => 'required|integer|min:0',
+            'partita_iva' => 'required|numeric|digits:11|unique:clients,partita_iva,' . $client->id,
+            'codice_fiscale' => 'required|alpha_num|uppercase|min:16|max:16|unique:clients,codice_fiscale,' . $client->id,
+            'sdi' => 'required|alpha_num|uppercase|min:7|max:7|unique:clients,sdi,' . $client->id,
+            'pec' => 'required|email|min:0|max:128',
+            'sede_legale' => 'required|string',
+            'city' => 'required|string',
+            'province_id' => 'required|integer|min:0',
+            'region_id' => 'required|integer|min:0',
+        ]);
+
+        $client->update($data);
+
+        $client_type = ClientType::find($data['client_type_id']);
+        $client->client_type()->associate($client_type);
+
+        $pricing_type = PricingType::find($data['pricing_type_id']);
+        $client->pricing_type()->associate($pricing_type);
+
+        $province = Province::find($data['province_id']);
+        $client->province()->associate($province);
+
+        $region = Region::find($data['region_id']);
+        $client->region()->associate($region);
+
+        $client->save();
+
+        return redirect()->route('dashboard.clients.index');
     }
 
     /**
