@@ -24,7 +24,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('dashboard.clients.update', props.client));
+    form.put(route('dashboard.clients.update', props.client));
     console.log(form)
 };
 </script>
@@ -34,7 +34,14 @@ const submit = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h1>Edit client</h1>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1>Modifica {{ client.ragione_sociale }}</h1>
+                </div>
+                <button onclick="history.back()" class="btn btn-dark ml-auto">
+                    Close
+                </button>
+            </div>
         </template>
         <form class="d-flex px-md-2" @submit.prevent="submit">
             <div class="col">
@@ -111,7 +118,7 @@ const submit = () => {
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-check-label" for="">Region</label>
+                    <label class="form-check-label" for="">Regione</label>
                     <select class="form-select" name="region_id" v-model="form.region_id">
                         <option selected>Open this select menu</option>
                         <option v-for="region in regions" :value="region.id">{{ region.name }}</option>
@@ -120,7 +127,7 @@ const submit = () => {
                     </div>
                 </div>
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-primary mr-3">Update</button>
+                    <button type="submit" class="btn btn-primary me-2">Update</button>
                     <button type="reset" @click="form.reset()" class="btn btn-warning mr-3">Reset</button>
                 </div>
             </div>

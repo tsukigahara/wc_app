@@ -18,43 +18,54 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::with(['client_type', 'pricing_type', 'province', 'region'])
+        $clients = Client::with(['client_type', 'pricing_type', 'province', 'region', 'delivery_data'])
             ->latest('updated_at')
             ->when(FacadesRequest::input('search'), function ($query, $search) {
-                if (!FacadesRequest::input('filter')) {
-                    $query->where('ragione_sociale', 'like', '%' . $search . '%');
-                }
+                $query->where('ragione_sociale', 'like', '%' . $search . '%')
+                    ->orWhere('partita_iva', 'like', '%' . $search . '%')
+                    ->orWhere('codice_fiscale', 'like', '%' . $search . '%')
+                    ->orWhere('sdi', 'like', '%' . $search . '%')
+                    ->orWhere('pec', 'like', '%' . $search . '%')
+                    ->orWhere('sede_legale', 'like', '%' . $search . '%')
+                    ->orWhere('city', 'like', '%' . $search . '%')
+                    // per la ricerca in tabelle diverse
+                    ->orWhereHas('delivery_data', function ($query) use ($search) {
+                        $query->where('sign', 'like', '%' . $search . '%')
+                            ->orWhere('reference_name', 'like', '%' . $search . '%')
+                            ->orWhere('telephone', 'like', '%' . $search . '%');
+                    });
             })
-            ->when(FacadesRequest::input('filter'), function ($query, $filter) {
-                $column = '';
-                switch ($filter) {
-                    case 'ragione_sociale':
-                        $column = 'ragione_sociale';
-                        break;
-                    case 'partita_iva':
-                        $column = 'partita_iva';
-                        break;
-                    case 'codice_fiscale':
-                        $column = 'codice_fiscale';
-                        break;
-                    case 'sdi':
-                        $column = 'sdi';
-                        break;
-                    case 'pec':
-                        $column = 'pec';
-                        break;
-                    case 'sede_legale':
-                        $column = 'sede_legale';
-                        break;
-                    case 'city':
-                        $column = 'city';
-                        break;
-                        // Aggiungi altri casi per le colonne desiderate
-                }
-                if ($column !== '') {
-                    $query->where($column, 'like', '%' . FacadesRequest::input('search') . '%');
-                }
-            })->paginate(20)->appends(FacadesRequest::only('search'));
+            // ->when(FacadesRequest::input('filter'), function ($query, $filter) {
+            //     $column = '';
+            //     switch ($filter) {
+            //         case 'ragione_sociale':
+            //             $column = 'ragione_sociale';
+            //             break;
+            //         case 'partita_iva':
+            //             $column = 'partita_iva';
+            //             break;
+            //         case 'codice_fiscale':
+            //             $column = 'codice_fiscale';
+            //             break;
+            //         case 'sdi':
+            //             $column = 'sdi';
+            //             break;
+            //         case 'pec':
+            //             $column = 'pec';
+            //             break;
+            //         case 'sede_legale':
+            //             $column = 'sede_legale';
+            //             break;
+            //         case 'city':
+            //             $column = 'city';
+            //             break;
+            //             // Aggiungi altri casi per le colonne desiderate
+            //     }
+            //     if ($column !== '') {
+            //         $query->where($column, 'like', '%' . FacadesRequest::input('search') . '%');
+            //     }
+            // })
+            ->paginate(8)->appends(FacadesRequest::only('search'));
         return Inertia::render('Client/Index', [
             'clients' => $clients,
             'filters' => FacadesRequest::only(['search', 'filter']),
@@ -110,7 +121,7 @@ class ClientController extends Controller
 
         $client->save();
 
-        return redirect()->route('dashboard.clients.index');
+        return redirect()->route('dashboard.clients.show', $client);
     }
 
     /**
@@ -118,7 +129,9 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
-        //
+        return Inertia::render('Client/Show', [
+            'client' => $client->load(['client_type', 'pricing_type', 'province', 'region', 'delivery_data' => ['province', 'region']]),
+        ]);
     }
 
     /**
@@ -170,7 +183,7 @@ class ClientController extends Controller
 
         $client->save();
 
-        return redirect()->route('dashboard.clients.index');
+        return redirect()->route('dashboard.clients.show', $client);
     }
 
     /**
@@ -178,6 +191,16 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        //
+        $client->client_type()->dissociate();
+
+        $client->pricing_type()->dissociate();
+
+        $client->province()->dissociate();
+
+        $client->region()->dissociate();
+
+        $client->delete();
+
+        return redirect()->route('dashboard.clients.index');
     }
 }

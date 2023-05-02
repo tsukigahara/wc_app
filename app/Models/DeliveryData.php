@@ -12,6 +12,7 @@ class DeliveryData extends Model
     protected $fillable = [
         'sign',
         'address',
+        'city',
         'note',
         'reference_name',
         'telephone',
@@ -20,7 +21,7 @@ class DeliveryData extends Model
 
     public function client()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(Client::class);
     }
 
     public function city()
