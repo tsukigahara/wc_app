@@ -8,10 +8,10 @@ const props = defineProps({
     'client': Object,
 })
 
-function remove(client) {
+function remove(routeName, client, deliveryData) {
     if (confirm('Are you sure? This proccess is irreversible.')) {
         if (confirm('Are you really sure?')) {
-            router.delete(route('dashboard.clients.destroy', client))
+            router.delete(route(`${routeName}`, [client, deliveryData]))
         }
     }
 }
@@ -29,8 +29,8 @@ function remove(client) {
                 </div>
                 <Link :href="route('dashboard.clients.index')" class="btn btn-dark ml-auto" as="button">Close</Link>
                 <!-- <button onclick="history.back()" class="btn btn-dark ml-auto">
-                            Close
-                        </button> -->
+                                                                                    Close
+                                                                                </button> -->
             </div>
         </template>
         <!-- index -->
@@ -99,7 +99,7 @@ function remove(client) {
                     <Link class="btn btn-primary" :href="route('dashboard.clients.edit', client)" as="button">
                     Edit
                     </Link>
-                    <button type="button" class="btn btn-danger" @click="remove(client)">
+                    <button type="button" class="btn btn-danger" @click="remove('dashboard.clients.destroy', client)">
                         Delete
                     </button>
                 </div>
@@ -117,60 +117,65 @@ function remove(client) {
             <div class="row row-cols-1 row-cols-md-3 row-cols-xl-4 g-4">
                 <div class="col" v-for="deliveryData in client.delivery_data">
                     <!-- card -->
-                    <div class="card shadow-sm">
+                    <div class="card h-100 shadow-sm">
                         <div class="card-header">
                             <small class="text-muted">Insegna</small>
                             <h3 class="card-title">
                                 {{ deliveryData.sign }}
                             </h3>
                         </div>
-                        <ul class="list-group list-group-flush text-bg-light">
-                            <li class="list-group-item">
-                                <small class="text-muted">Nome referente</small>
-                                <div>
-                                    {{ deliveryData.reference_name }}
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <small class="text-muted">Telefono</small>
-                                <div>
-                                    {{ deliveryData.telephone }}
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <small class="text-muted">Email</small>
-                                <div>
-                                    {{ deliveryData.email }}
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <small class="text-muted">Indirizzo consegna</small>
-                                <div>
-                                    {{ deliveryData.address }}
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <small class="text-muted">Provincia</small>
-                                <div>
-                                    {{ deliveryData.province.name }}
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <small class="text-muted">Regione</small>
-                                <div>
-                                    {{ deliveryData.region.name }}
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <small class="text-muted">Note</small>
-                                <div>
-                                    {{ deliveryData.note }}
-                                </div>
-                            </li>
-                        </ul>
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush text-bg-light">
+                                <li class="list-group-item">
+                                    <small class="text-muted">Nome referente</small>
+                                    <div>
+                                        {{ deliveryData.reference_name }}
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <small class="text-muted">Telefono</small>
+                                    <div>
+                                        {{ deliveryData.telephone }}
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <small class="text-muted">Email</small>
+                                    <div>
+                                        {{ deliveryData.email }}
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <small class="text-muted">Indirizzo consegna</small>
+                                    <div>
+                                        {{ deliveryData.address }}
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <small class="text-muted">Provincia</small>
+                                    <div>
+                                        {{ deliveryData.province.name }}
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <small class="text-muted">Regione</small>
+                                    <div>
+                                        {{ deliveryData.region.name }}
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <small class="text-muted">Note</small>
+                                    <div>
+                                        {{ deliveryData.note }}
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="card-footer">
-                            <Link class="btn btn-primary"
-                                :href="route('dashboard.clients.delivery_data.edit', [client, deliveryData])">edit</Link>
+                            <Link class="btn btn-primary me-2"
+                                :href="route('dashboard.clients.delivery_data.edit', [client, deliveryData])">Edit</Link>
+                            <button class="btn btn-danger"
+                                @click="remove('dashboard.clients.delivery_data.destroy', client, deliveryData)">Delete
+                            </button>
                         </div>
                     </div>
                 </div>

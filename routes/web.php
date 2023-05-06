@@ -39,6 +39,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::post('/dashboard/clients/{client}/delivery_data', [DeliveryDataController::class, 'store'])->name('dashboard.clients.delivery_data.store');
     Route::get('/dashboard/clients/{client}/delivery_data/{deliveryData}/edit', [DeliveryDataController::class, 'edit'])->name('dashboard.clients.delivery_data.edit');
     Route::put('/dashboard/clients/{client}/delivery_data/{deliveryData}', [DeliveryDataController::class, 'update'])->name('dashboard.clients.delivery_data.update');
+    Route::delete('/dashboard/clients/{client}/delivery_data/{deliveryData}', [DeliveryDataController::class, 'destroy'])->name('dashboard.clients.delivery_data.destroy');
 });
 
 Route::middleware('auth')->group(function () {

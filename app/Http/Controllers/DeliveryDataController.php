@@ -131,8 +131,14 @@ class DeliveryDataController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DeliveryData $deliveryData)
+    public function destroy(Client $client, DeliveryData $deliveryData)
     {
-        //
+        $deliveryData->province()->dissociate();
+        $deliveryData->region()->dissociate();
+        $deliveryData->client()->dissociate();
+
+        $deliveryData->delete();
+
+        return redirect()->back();
     }
 }
