@@ -13,7 +13,7 @@ class Supplier extends Model
         'name',
         'referent_name',
         'telephone',
-        'emai',
+        'email',
     ];
 
     //polimorphic many
