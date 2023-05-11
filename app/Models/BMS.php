@@ -14,4 +14,9 @@ class BMS extends Model
     protected $fillable = [
         'value',
     ];
+
+    public function meats()
+    {
+        return $this->hasMany(Meat::class);
+    }
 }

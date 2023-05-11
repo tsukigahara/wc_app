@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MeatType extends Model
+class MeatSubname extends Model
 {
     use HasFactory;
 
@@ -13,8 +13,10 @@ class MeatType extends Model
 
     protected $fillable = [
         'name',
-        'name_jp',
-        'name_en',
-        'note',
     ];
+
+    public function meats()
+    {
+        return $this->belongsToMany(Meat::class);
+    }
 }

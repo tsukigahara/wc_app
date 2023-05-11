@@ -15,4 +15,10 @@ class Supplier extends Model
         'telephone',
         'emai',
     ];
+
+    //polimorphic many
+    public function meats()
+    {
+        return $this->morphedByMany(Meat::class, 'supplierable');
+    }
 }
