@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('sign');
             $table->string('address');
             $table->string('city');
-            $table->text('note');
+            $table->text('note')->nullable();
             $table->string('reference_name');
             $table->string('telephone');
             $table->string('email');

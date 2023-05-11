@@ -34,9 +34,9 @@ watch([search, filter], ([value, value2]) => {
         </template>
         <!-- buttons -->
         <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <Link class="btn btn-primary btn-lg mb-3" :href="route('dashboard.clients.create')" role="button">Add client
-                </Link>
-            </div> -->
+                    <Link class="btn btn-primary btn-lg mb-3" :href="route('dashboard.clients.create')" role="button">Add client
+                    </Link>
+                </div> -->
         <!-- search -->
         <div class="input-group mb-3">
             <input v-model="search" type="text" class="form-control" placeholder="Search">
@@ -64,10 +64,16 @@ watch([search, filter], ([value, value2]) => {
                                 <span class="badge rounded-pill text-bg-primary">prezzo: {{ client.pricing_type.name
                                 }}</span>
                             </li>
-                            <li class="list-group-item">
+                            <li v-if="client.partita_iva" class="list-group-item">
                                 <small class="text-muted">Partita iva</small>
                                 <div>
                                     {{ client.partita_iva }}
+                                </div>
+                            </li>
+                            <li v-else class="list-group-item">
+                                <small class="text-muted">Codice fiscale</small>
+                                <div>
+                                    {{ client.codice_fiscale }}
                                 </div>
                             </li>
                             <li class="list-group-item">
