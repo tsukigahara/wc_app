@@ -14,4 +14,9 @@ class State extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function suppliers()
+    {
+        return $this->hasMany(Supplier::class);
+    }
 }

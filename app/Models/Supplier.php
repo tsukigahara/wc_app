@@ -21,4 +21,9 @@ class Supplier extends Model
     {
         return $this->morphedByMany(Meat::class, 'supplierable');
     }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
 }
