@@ -13,14 +13,12 @@ return new class extends Migration
     {
         Schema::create('meats', function (Blueprint $table) {
             $table->id();
-            $table->float('unit');
-            $table->float('average_size');
+            $table->string('name');
+            $table->float('average_weight');
             $table->float('pz_box');
 
-
-
             //same for all products
-            $table->float('purchase_price');
+            $table->float('purchase_cost');
             $table->float('b2b_price');
             $table->float('b2b_percentage');
             $table->float('b2d_price');

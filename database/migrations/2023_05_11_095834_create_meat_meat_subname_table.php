@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('meat_types', function (Blueprint $table) {
+        Schema::create('meat_meat_subname', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('name_jp');
-            $table->string('name_en');
-            $table->string('note');
             $table->timestamps();
         });
     }
@@ -26,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('meat_types');
+        Schema::dropIfExists('meat_meat_subname');
     }
 };

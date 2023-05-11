@@ -12,6 +12,13 @@ class Meat extends Product
     protected $fillable = [
         'unit',
         'average_size',
-        'pz_box'
+        'pz_box',
+        'purchase_price',
+        'b2b_price',
+        'b2b_percentage',
+        'b2d_price',
+        'b2d_percentage',
+        'b2c_price',
+        'b2c_percentage',
     ];
 }
